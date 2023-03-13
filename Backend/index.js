@@ -1,11 +1,13 @@
 const connectToMongo = require("./db");
 const express = require("express");
+const cors = require("cors");
 
 connectToMongo();
 
 const app = express();
-const port = 6000;
+const port = 5001;
 
+app.use(cors()); // For connectivity with react
 app.use(express.json());
 //Available routes
 
