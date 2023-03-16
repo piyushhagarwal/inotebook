@@ -1,40 +1,44 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
+import "./css/Modal.css";
 import NoteContext from "../context/notes/NoteContext";
 
-export default function AddNote() {
+function Modal(props) {
   const context = useContext(NoteContext);
-  const { addNote } = context;
-  const [note, setNote] = useState({
-    title: "",
-    description: "",
-    tag: "general",
-  });
-
-  const submitNote = (e) => {
-    addNote(note.title, note.description, note.tag);
-    setNote({
-      title: "",
-      description: "",
-      tag: "general",
-    });
-    e.preventDefault();
-  };
-
+  const { setModal, editNote } = context;
+  const { initialNote, setNote } = props;
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-
     setNote((prev) => {
-      return {
-        ...prev,
-        [name]: value,
-      };
+      return { ...prev, [name]: value };
     });
   };
-
+  const submitUpdatedNote = (e) => {
+    e.preventDefault();
+    editNote(
+      initialNote._id,
+      initialNote.title,
+      initialNote.description,
+      initialNote.tag
+    );
+    setModal(false);
+  };
   return (
-    <div>
-      <div className="container px-5 my-3">
-        <h1>Add a note</h1>
+    <div className="modalBackground">
+      <div className="modalContainer">
+        <div className="d-flex align-items-center justify-content-between">
+          <div>
+            <h1>Edit note</h1>
+          </div>
+          <div className="titleCloseBtn">
+            <button
+              onClick={() => {
+                setModal(false);
+              }}
+            >
+              X
+            </button>
+          </div>
+        </div>
         <form className="my-3 ">
           <div className="form-group my-3">
             <label htmlFor="title">Title</label>
@@ -45,7 +49,7 @@ export default function AddNote() {
               aria-describedby="emailHelp"
               placeholder="Enter Title"
               name="title"
-              value={note.title}
+              value={initialNote.title}
               onChange={handleOnChange}
             />
           </div>
@@ -54,12 +58,12 @@ export default function AddNote() {
             <textarea
               type="text"
               className="form-control"
-              rows="3"
               id="description"
               placeholder="Enter Description"
               name="description"
-              value={note.description}
+              value={initialNote.description}
               onChange={handleOnChange}
+              rows="3"
             />
           </div>
 
@@ -71,7 +75,7 @@ export default function AddNote() {
               id="tag"
               placeholder="Enter Tag"
               name="tag"
-              value={note.tag}
+              value={initialNote.tag}
               onChange={handleOnChange}
             />
           </div>
@@ -79,12 +83,14 @@ export default function AddNote() {
           <button
             type="submit"
             className="btn btn-primary"
-            onClick={submitNote}
+            onClick={submitUpdatedNote}
           >
-            Add note
+            Update note
           </button>
         </form>
       </div>
     </div>
   );
 }
+
+export default Modal;

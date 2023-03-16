@@ -44,11 +44,11 @@ function Navbar() {
               </Link>
             </li>
           </ul>
-          <form className="d-flex">
-            <button className="btn btn-outline-success" type="submit">
+          <form className="d-flex ">
+            <button className="btn btn-outline-success mx-2" type="submit">
               Login
             </button>
-            <button className="btn btn-outline-success" type="submit">
+            <button className="btn btn-outline-success mx-2" type="submit">
               SignUp
             </button>
           </form>
