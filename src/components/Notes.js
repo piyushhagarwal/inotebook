@@ -3,6 +3,7 @@ import NoteContext from "../context/notes/NoteContext";
 import AddNote from "./AddNote";
 import SingleNote from "./SingleNote";
 import Modal from "./Modal";
+import { useNavigate } from "react-router-dom";
 
 export default function Notes() {
   const context = useContext(NoteContext);
@@ -12,10 +13,15 @@ export default function Notes() {
     describe: "",
     tag: "",
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     return () => {
-      getNotes();
+      if (localStorage.getItem("token")) {
+        getNotes();
+      } else {
+        navigate("/login");
+      }
     };
   }, []);
 

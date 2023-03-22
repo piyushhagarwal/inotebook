@@ -28,6 +28,7 @@ router.post(
       let user = await User.findOne({ email: req.body.email });
       if (user) {
         return res.status(400).json({
+          success: false,
           error: "Sorry the user with the given email already exists",
         });
       }
@@ -50,7 +51,7 @@ router.post(
         },
       };
       const authToken = jwt.sign(data, JWT_SECRET);
-      res.send({ authToken }); // It means {authToken : authToken}
+      res.send({ success: true, authToken }); // It means {authToken : authToken}
     } catch (error) {
       console.log(error.message);
       res.status(500).send("Some error occured while creating an user");
@@ -76,15 +77,17 @@ router.post(
       let user = await User.findOne({ email: email });
       //If the user with same email does't exists
       if (!user) {
-        return res
-          .status(400)
-          .json({ error: "Please try to login with correct credentials" });
+        return res.status(400).json({
+          success: false,
+          error: "Please try to login with correct credentials",
+        });
       }
       const passwordCompare = await bcrypt.compare(password, user.password); // It returns true or false
       if (!passwordCompare) {
-        return res
-          .status(400)
-          .json({ error: "Please try to login with correct credentials" });
+        return res.status(400).json({
+          success: false,
+          error: "Please try to login with correct password",
+        });
       }
       const data = {
         user: {
@@ -92,7 +95,7 @@ router.post(
         },
       };
       const authToken = jwt.sign(data, JWT_SECRET);
-      res.send({ authToken }); // It means {authToken : authToken}
+      res.send({ success: true, authToken }); // It means {authToken : authToken}
     } catch (error) {
       console.log(error.message);
       res.status(500).send("Internal server error");
